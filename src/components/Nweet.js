@@ -1,6 +1,7 @@
 import {useState} from "react";
-import { dbService } from "fbase";
+import { dbService} from "fbase";
 import { updateDoc, deleteDoc, doc } from "@firebase/firestore";
+import { getStorage, ref,deleteObject} from "@firebase/storage";
 import { updateModuleBlock } from "typescript";
 
 const Nweet = ({nweetObj,isOwner})=>{
@@ -12,6 +13,11 @@ const Nweet = ({nweetObj,isOwner})=>{
 
         if(ok){
             await deleteDoc(doc(dbService, `nweets/${nweetObj.id}`));
+            if (nweetObj.attachmentUrl!==""){
+                const storage =getStorage();
+                const storageRef = ref(storage, nweetObj.attachmentUrl);
+                deleteObject(storageRef);
+            }
         }
 
     };
@@ -48,6 +54,9 @@ const Nweet = ({nweetObj,isOwner})=>{
         ):(
             <>
             <h4>{nweetObj.text}</h4>
+            {nweetObj.attachmentUrl&&(
+                <img src={nweetObj.attachmentUrl} width="50px" height="50px"/>
+            )}
             {isOwner &&(
                 <>
                 <button onClick={onDeleteClick}>Delete nweet</button>
