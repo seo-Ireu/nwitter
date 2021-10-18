@@ -2,7 +2,6 @@ import {useState} from "react";
 import { dbService} from "fbase";
 import { updateDoc, deleteDoc, doc } from "@firebase/firestore";
 import { getStorage, ref,deleteObject} from "@firebase/storage";
-import { updateModuleBlock } from "typescript";
 
 const Nweet = ({nweetObj,isOwner})=>{
     const [editing,setEditing] = useState(false);

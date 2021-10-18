@@ -13,13 +13,16 @@ const Home = ({userObj}) => {
 
     const onSubmit = async (event) =>{
         event.preventDefault();
-        
-        const storage =getStorage();
-        const storageRef = ref(storage,'images');
-        const attachmentRef =ref(storageRef,`${userObj.uid}/${uuidv4()}`);
-        const uploadTask = await uploadString(attachmentRef,attachment,'data_url');
+        let attachmentUrl = "";
 
-        const attachmentUrl=(await getDownloadURL(attachmentRef)).toString();
+        if(attachment!==""){
+            const storage =getStorage();
+            const storageRef = ref(storage,'images');
+            const attachmentRef =ref(storageRef,`${userObj.uid}/${uuidv4()}`);
+            const uploadTask = await uploadString(attachmentRef,attachment,'data_url');    
+            attachmentUrl=(await getDownloadURL(attachmentRef)).toString();
+        }
+         
         const docRef = await addDoc(collection(dbService,"nweets"),{
             text:nweet,
             createdAt:serverTimestamp(),
